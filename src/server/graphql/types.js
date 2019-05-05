@@ -24,7 +24,7 @@ const typeDefs = gql`
 
   type Query {
     user: User
-    product: Product
+    products: [Product]
   }
 
   """
