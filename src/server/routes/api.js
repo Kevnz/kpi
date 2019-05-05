@@ -1,5 +1,5 @@
-const faker = require('faker')
 const Cache = require('@brightleaf/cache')
+const { Post, User, Product } = require('../models')
 
 const redisConfig = {
   port: process.env.REDIS_PORT,
@@ -11,32 +11,38 @@ if (process.env.REDIS_PASSWORD) {
 }
 
 const cache = new Cache({ prepend: 'kpi', redis: redisConfig })
-const createUser = () => {
-  const firstName = faker.name.firstName()
-  const lastName = faker.name.lastName()
-  return {
-    id: faker.random.uuid(),
-    firstName,
-    lastName,
-    email: faker.internet
-      .email(firstName, lastName, 'example.com')
-      .toLowerCase(),
-    username: faker.internet.userName(firstName, lastName).toLowerCase(),
-  }
-}
-
-const createProduct = () => {
-  return {
-    id: faker.random.uuid(),
-    name: faker.commerce.productName(),
-    price: faker.commerce.price(),
-    category: faker.commerce.department(),
-    description: `${faker.commerce.productAdjective()} ${faker.commerce.productMaterial()}. ${faker.company.catchPhrase()}.`,
-    image: faker.image.imageUrl(),
-  }
-}
 
 module.exports = [
+  {
+    method: 'GET',
+    path: '/api/blog/posts',
+    config: {
+      handler: async (request, h) => {
+        const posts = await cache.get('all-posts')
+        if (posts) {
+          return posts
+        }
+        const genPosts = Product.getProducts()
+        cache.set('all-posts', genPosts)
+        return genPosts
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/blog/posts/{slug}',
+    config: {
+      handler: async (request, h) => {
+        const posts = await cache.get('all-posts')
+        if (posts) {
+          const one = posts.find(p => p.slug === request.params.slug)
+          if (one && one.length > 0) return one[0]
+          return posts[0]
+        }
+        return Post.get()
+      },
+    },
+  },
   {
     method: 'GET',
     path: '/api/users',
@@ -46,18 +52,7 @@ module.exports = [
         if (users) {
           return users
         }
-        const genUsers = [
-          createUser(),
-          createUser(),
-          createUser(),
-          createUser(),
-          createUser(),
-          createUser(),
-          createUser(),
-          createUser(),
-          createUser(),
-          createUser(),
-        ]
+        const genUsers = User.getUsers()
         cache.set('all-users', genUsers)
         return genUsers
       },
@@ -72,28 +67,7 @@ module.exports = [
         if (products) {
           return products
         }
-        const genProds = [
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-          createProduct(),
-        ]
+        const genProds = Product.getProducts()
         cache.set('all-products', genProds)
         return genProds
       },
@@ -110,7 +84,7 @@ module.exports = [
           if (one && one.length > 0) return one[0]
           return products[0]
         }
-        return createProduct()
+        return Product.getProduct()
       },
     },
   },
