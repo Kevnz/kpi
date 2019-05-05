@@ -1,5 +1,16 @@
 const faker = require('faker')
+const Cache = require('@brightleaf/cache')
 
+const redisConfig = {
+  port: process.env.REDIS_PORT,
+  host: process.env.REDIS_HOST,
+}
+
+if (process.env.REDIS_PASSWORD) {
+  redisConfig.password = process.env.REDIS_PASSWORD
+}
+
+const cache = new Cache({ prepend: 'kpi', redis: redisConfig })
 const createUser = () => {
   const firstName = faker.name.firstName()
   const lastName = faker.name.lastName()
@@ -30,8 +41,12 @@ module.exports = [
     method: 'GET',
     path: '/api/users',
     config: {
-      handler: (request, h) => {
-        return [
+      handler: async (request, h) => {
+        const users = await cache.get('all-users')
+        if (users) {
+          return users
+        }
+        const genUsers = [
           createUser(),
           createUser(),
           createUser(),
@@ -43,6 +58,8 @@ module.exports = [
           createUser(),
           createUser(),
         ]
+        cache.set('all-users', genUsers)
+        return genUsers
       },
     },
   },

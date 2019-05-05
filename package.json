@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {},
   "dependencies": {
+    "@brightleaf/cache": "^1.0.0",
     "@hapi/nes": "^11.1.0",
     "apollo-server-hapi": "^2.4.8",
     "blipp": "^4.0.0",
