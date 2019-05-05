@@ -6,7 +6,7 @@
     "start": "node ./src/server/index.js"
   },
   "dependencies": {
-    "@brightleaf/cache": "^1.0.1",
+    "@brightleaf/cache": "^1.0.2",
     "@hapi/nes": "^11.1.0",
     "apollo-server-hapi": "^2.4.8",
     "blipp": "^4.0.0",
