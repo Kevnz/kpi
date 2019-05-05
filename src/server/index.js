@@ -22,16 +22,22 @@ const start = async () => {
         },
       },
     })
+    await app.register({
+      plugin: require('@hapi/nes'),
+      options: {
+        onConnection: socket => {
+          console.info('socket connected')
+        },
+      },
+    })
     await app.register(Manifest)
     await server.applyMiddleware({
       app,
     })
 
-    await server.installSubscriptionHandlers(app.listener)
-
     await app.start()
   } catch (err) {
-    console.log(err)
+    console.error(err)
     process.exit(1)
   }
   console.log('🚀 Server running')
