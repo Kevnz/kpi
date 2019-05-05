@@ -1,29 +1,24 @@
 const { User } = require('../models')
-const { getUserIdFromContext, getToken } = require('../utils/auth')
+const { getToken } = require('../utils/auth')
 const resolvers = {
   Query: {
     user: async (root, args, context, info) => {
-      const user = await new User({ id: getUserIdFromContext(context) }).fetch()
-      return user.toJSON()
+      return User.getUser
     },
   },
   Mutation: {
     login: async (root, args, context, info) => {
-      const user = await User.login(
-        args.loginInput.email,
-        args.loginInput.password
-      )
+      const user = await User.getUser()
       return {
         token: getToken(user.id),
-        user: user.toJSON(),
+        user: user,
       }
     },
     signup: async (root, args, context, info) => {
-      const user = await User.register(args.newUserInput)
-      await user.save()
+      const user = User.getUser(args.newUserInput)
       return {
         token: getToken(user.id),
-        user: user.toJSON(),
+        user: user,
       }
     },
   },
