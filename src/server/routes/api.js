@@ -18,12 +18,12 @@ module.exports = [
     path: '/api/blog/posts',
     config: {
       handler: async (request, h) => {
-        const posts = await cache.get('all-posts')
+        const posts = await cache.get('all-blog-posts')
         if (posts) {
           return posts
         }
-        const genPosts = Product.getProducts()
-        cache.set('all-posts', genPosts)
+        const genPosts = Post.getAll()
+        cache.set('all-blog-posts', genPosts)
         return genPosts
       },
     },
@@ -33,7 +33,7 @@ module.exports = [
     path: '/api/blog/posts/{slug}',
     config: {
       handler: async (request, h) => {
-        const posts = await cache.get('all-posts')
+        const posts = await cache.get('all-blog-posts')
         if (posts) {
           const one = posts.find(p => p.slug === request.params.slug)
           if (one && one.length > 0) return one[0]
