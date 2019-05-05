@@ -11,8 +11,20 @@ const typeDefs = gql`
     email: String
   }
 
+  """
+  The Product
+  """
+  type Product {
+    name: String
+    price: String
+    category: String
+    description: String
+    image: String
+  }
+
   type Query {
     user: User
+    product: Product
   }
 
   """
@@ -46,9 +58,7 @@ const typeDefs = gql`
     """
     **signup** allows user to create an account
     """
-    signup(
-      newUserInput: NewUserInput!
-    ): AuthPayload!
+    signup(newUserInput: NewUserInput!): AuthPayload!
 
     """
     **login** allows a user to authenticate
