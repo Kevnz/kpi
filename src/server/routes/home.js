@@ -5,7 +5,7 @@ module.exports = [
     config: {
       handler: (request, h) => {
         return 'API'
-      },,
-    },,
+      },
+    },
   },
 ]
