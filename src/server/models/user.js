@@ -15,9 +15,19 @@ const createUser = () => {
 }
 
 module.exports = {
-  getUser: createUser,
-  getUsers: () => {
+  get: createUser,
+  getAll: () => {
     return [
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
+      createUser(),
       createUser(),
       createUser(),
       createUser(),

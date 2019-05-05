@@ -52,7 +52,7 @@ module.exports = [
         if (users) {
           return users
         }
-        const genUsers = User.getUsers()
+        const genUsers = User.getAll()
         cache.set('all-users', genUsers)
         return genUsers
       },
@@ -67,7 +67,7 @@ module.exports = [
         if (products) {
           return products
         }
-        const genProds = Product.getProducts()
+        const genProds = Product.getAll()
         cache.set('all-products', genProds)
         return genProds
       },
@@ -84,7 +84,7 @@ module.exports = [
           if (one && one.length > 0) return one[0]
           return products[0]
         }
-        return Product.getProduct()
+        return Product.get()
       },
     },
   },

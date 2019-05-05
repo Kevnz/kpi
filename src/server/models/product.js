@@ -12,8 +12,8 @@ const createProduct = () => {
 }
 
 module.exports = {
-  getProduct: createProduct,
-  getProducts: () => {
+  get: createProduct,
+  getAll: () => {
     return [
       createProduct(),
       createProduct(),
