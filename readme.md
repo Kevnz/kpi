@@ -1,15 +1,3 @@
-# My Custom App
+# KPI - Faker API
 
-```
-- docker
-- src
--- server
---- models
---- public
---- routes
--- ui
---- core
---- features
-
-```
-
+Fake data for testing things
