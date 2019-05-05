@@ -4,7 +4,7 @@ const createPost = () => {
   const postTitle = faker.company.catchPhrase()
   return {
     id: faker.random.uuid(),
-    slug: faker.internet.slug(),
+    slug: faker.lorem.slug(),
     title: postTitle,
     category: faker.commerce.department(),
     description: `${faker.commerce.productAdjective()} ${faker.commerce.productMaterial()}. ${faker.company.catchPhrase()}.`,
