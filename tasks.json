@@ -1,0 +1,5 @@
+{
+  "lint": "eslint ./src",
+  "dev": "nodemon ./src/server/index.js",
+  "start": "node ./src/server/index.js"
+}
