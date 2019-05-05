@@ -1,1 +1,1 @@
-web: npx isom start
+web: npm start

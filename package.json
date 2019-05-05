@@ -2,7 +2,9 @@
   "name": "kpi",
   "version": "1.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "start": "node ./src/server/index.js"
+  },
   "dependencies": {
     "@brightleaf/cache": "^1.0.0",
     "@hapi/nes": "^11.1.0",
