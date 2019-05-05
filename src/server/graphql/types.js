@@ -15,6 +15,7 @@ const typeDefs = gql`
   The Product
   """
   type Product {
+    id: String
     name: String
     price: String
     category: String
@@ -22,9 +23,23 @@ const typeDefs = gql`
     image: String
   }
 
+  """
+  The Blog Post
+  """
+  type Post {
+    id: String
+    title: String
+    slug: String
+    category: String
+    description: String
+    image: String
+    body: String
+  }
   type Query {
     user: User
     products: [Product]
+    posts: [Post]
+    post(slug: String): Post
   }
 
   """
