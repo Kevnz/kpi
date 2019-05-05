@@ -107,7 +107,7 @@ module.exports = [
         const products = await cache.get('all-products')
         if (products) {
           const one = products.find(p => p.id === request.params.id)
-          if (one.length > 0) return one[0]
+          if (one && one.length > 0) return one[0]
           return products[0]
         }
         return createProduct()
