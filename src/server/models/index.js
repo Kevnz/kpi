@@ -1,11 +1,7 @@
-const bookshelf = require('../bookshelf')
 const User = require('./user')
-
-const Users = bookshelf.Collection.extend({
-  model: User,
-})
+const Product = require('./product')
 
 module.exports = {
   User,
-  Users,
+  Product,
 }
