@@ -67,8 +67,12 @@ module.exports = [
     method: 'GET',
     path: '/api/products',
     config: {
-      handler: (request, h) => {
-        return [
+      handler: async (request, h) => {
+        const products = await cache.get('all-products')
+        if (products) {
+          return products
+        }
+        const genProds = [
           createProduct(),
           createProduct(),
           createProduct(),
@@ -90,6 +94,8 @@ module.exports = [
           createProduct(),
           createProduct(),
         ]
+        cache.set('all-products', genProds)
+        return genProds
       },
     },
   },
@@ -97,7 +103,13 @@ module.exports = [
     method: 'GET',
     path: '/api/products/{id}',
     config: {
-      handler: (request, h) => {
+      handler: async (request, h) => {
+        const products = await cache.get('all-products')
+        if (products) {
+          const one = products.find(p => p.id === request.params.id)
+          if (one.length > 0) return one[0]
+          return products[0]
+        }
         return createProduct()
       },
     },
