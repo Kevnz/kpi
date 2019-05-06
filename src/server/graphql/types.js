@@ -37,6 +37,8 @@ const typeDefs = gql`
   }
   type Query {
     user: User
+    users: [User]
+    product(id: String): Product
     products: [Product]
     posts: [Post]
     post(slug: String): Post
