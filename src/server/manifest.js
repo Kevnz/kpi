@@ -32,6 +32,6 @@ module.exports = [
     },
   },
   {
-    plugin: require('../plugins/ga'),
+    plugin: require('./plugins/ga'),
   },
 ]
