@@ -23,7 +23,7 @@ module.exports = [
     path: '/api/blog/posts',
     config: {
       handler: async (request, h) => {
-        ga(GA_CATEGORY, 'Posts Call')
+        ga.event(GA_CATEGORY, 'Posts Call')
         const posts = await cache.get(POSTS_KEY)
         if (posts) {
           return posts
@@ -39,7 +39,7 @@ module.exports = [
     path: '/api/blog/posts/{slug}',
     config: {
       handler: async (request, h) => {
-        ga(GA_CATEGORY, 'Post Call')
+        ga.event(GA_CATEGORY, 'Post Call')
         const posts = await cache.get(POSTS_KEY)
         if (posts) {
           const one = posts.find(p => p.slug === request.params.slug)
@@ -55,7 +55,7 @@ module.exports = [
     path: '/api/users',
     config: {
       handler: async (request, h) => {
-        ga(GA_CATEGORY, 'Users Call')
+        ga.event(GA_CATEGORY, 'Users Call')
         const users = await cache.get('all-users')
         if (users) {
           return users
@@ -71,7 +71,7 @@ module.exports = [
     path: '/api/products',
     config: {
       handler: async (request, h) => {
-        ga(GA_CATEGORY, 'Products Call')
+        ga.event(GA_CATEGORY, 'Products Call')
         const products = await cache.get(PRODUCTS_KEY)
         if (products) {
           return products
@@ -87,7 +87,7 @@ module.exports = [
     path: '/api/products/{id}',
     config: {
       handler: async (request, h) => {
-        ga(GA_CATEGORY, 'Product Call')
+        ga.event(GA_CATEGORY, 'Product Call')
         const products = await cache.get(PRODUCTS_KEY)
         if (products) {
           const one = products.find(p => p.id === request.params.id)
@@ -103,7 +103,7 @@ module.exports = [
     path: '/api/echo',
     config: {
       handler: async (request, h) => {
-        ga(GA_CATEGORY, 'ECHO Post')
+        ga.event(GA_CATEGORY, 'ECHO Post')
         return request.payload
       },
     },
@@ -113,7 +113,7 @@ module.exports = [
     path: '/api/echo/{entity}',
     config: {
       handler: async (request, h) => {
-        ga(GA_CATEGORY, `ECHO Entity ${request.params.entity} Post`)
+        ga.event(GA_CATEGORY, `ECHO Entity ${request.params.entity} Post`)
         return request.payload
       },
     },
