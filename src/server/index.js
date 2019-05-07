@@ -5,6 +5,7 @@ const Hapi = require('hapi')
 const Manifest = require('./manifest')
 const Types = require('./graphql/types')
 const Resolvers = require('./graphql/resolvers')
+const ga = require('./utils/ga')
 let app
 
 const start = async () => {
@@ -45,17 +46,20 @@ const start = async () => {
     console.error(err)
     process.exit(1)
   }
-  console.log('🚀 Server running')
+  console.info('🚀 Server running')
+  ga.event('ServerOperation', 'Started')
 }
 
 process.on('SIGINT', async () => {
-  console.log('stopping server')
+  console.warn('stopping server')
   try {
     await app.stop({ timeout: 10000 })
-    console.log('The server has stopped 🛑')
+    ga.event('ServerOperation', 'Stopped')
+    console.info('The server has stopped 🛑')
     process.exit(0)
   } catch (err) {
-    console.error('shutdown server error', err)
+    ga.event('ServerOperation', 'ShutdownError')
+    console.error('Shutdown Server Error 💀', err)
     process.exit(1)
   }
 })
