@@ -1,5 +1,5 @@
 const ga = require('../utils/ga')
-const pkg = require('../package.json')
+
 const register = (server, options) => {
   server.decorate('request', 'ga.page', ga.page)
   server.decorate('request', 'ga.event', ga.event)
@@ -9,6 +9,9 @@ const register = (server, options) => {
     return h.continue
   })
 }
-const { name, version } = pkg
+const { name, version } = {
+  name: 'GA-Plugin',
+  version: '1.0.0',
+}
 
 module.exports = { register, name, version }
