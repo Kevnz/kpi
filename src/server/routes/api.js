@@ -1,6 +1,6 @@
 const Cache = require('@brightleaf/cache')
 const { Post, User, Product } = require('../models')
-
+const ga = require('../utils/ga')
 const redisConfig = {
   port: process.env.REDIS_PORT,
   host: process.env.REDIS_HOST,
@@ -16,12 +16,14 @@ const POSTS_KEY = 'all-blog-posts'
 
 const PRODUCTS_KEY = 'all-products'
 
+const GA_CATEGORY = 'API REST Call'
 module.exports = [
   {
     method: 'GET',
     path: '/api/blog/posts',
     config: {
       handler: async (request, h) => {
+        ga(GA_CATEGORY, 'Posts Call')
         const posts = await cache.get(POSTS_KEY)
         if (posts) {
           return posts
@@ -37,6 +39,7 @@ module.exports = [
     path: '/api/blog/posts/{slug}',
     config: {
       handler: async (request, h) => {
+        ga(GA_CATEGORY, 'Post Call')
         const posts = await cache.get(POSTS_KEY)
         if (posts) {
           const one = posts.find(p => p.slug === request.params.slug)
@@ -52,6 +55,7 @@ module.exports = [
     path: '/api/users',
     config: {
       handler: async (request, h) => {
+        ga(GA_CATEGORY, 'Users Call')
         const users = await cache.get('all-users')
         if (users) {
           return users
@@ -67,6 +71,7 @@ module.exports = [
     path: '/api/products',
     config: {
       handler: async (request, h) => {
+        ga(GA_CATEGORY, 'Products Call')
         const products = await cache.get(PRODUCTS_KEY)
         if (products) {
           return products
@@ -82,6 +87,7 @@ module.exports = [
     path: '/api/products/{id}',
     config: {
       handler: async (request, h) => {
+        ga(GA_CATEGORY, 'Product Call')
         const products = await cache.get(PRODUCTS_KEY)
         if (products) {
           const one = products.find(p => p.id === request.params.id)
@@ -89,6 +95,26 @@ module.exports = [
           return products[0]
         }
         return Product.get()
+      },
+    },
+  },
+  {
+    method: 'POST',
+    path: '/api/echo',
+    config: {
+      handler: async (request, h) => {
+        ga(GA_CATEGORY, 'ECHO Post')
+        return request.payload
+      },
+    },
+  },
+  {
+    method: 'POST',
+    path: '/api/echo/{entity}',
+    config: {
+      handler: async (request, h) => {
+        ga(GA_CATEGORY, `ECHO Entity ${request.params.entity} Post`)
+        return request.payload
       },
     },
   },
