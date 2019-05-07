@@ -31,4 +31,7 @@ module.exports = [
       routes: ['src/server/routes/**/*.js'],
     },
   },
+  {
+    plugin: require('../plugins/ga'),
+  },
 ]
