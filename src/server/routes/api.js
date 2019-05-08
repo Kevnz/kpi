@@ -1,5 +1,7 @@
 const Cache = require('@brightleaf/cache')
+const { delay } = require('@kev_nz/async-tools')
 const { Post, User, Product } = require('../models')
+
 const ga = require('../utils/ga')
 const redisConfig = {
   port: process.env.REDIS_PORT,
@@ -104,6 +106,7 @@ module.exports = [
     config: {
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'ECHO Post')
+        await delay(800)
         return request.payload
       },
     },
@@ -113,6 +116,7 @@ module.exports = [
     path: '/api/echo/{entity}',
     config: {
       handler: async (request, h) => {
+        await delay(1200)
         ga.event(GA_CATEGORY, `ECHO Entity ${request.params.entity} Post`)
         return request.payload
       },
