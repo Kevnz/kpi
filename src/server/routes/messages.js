@@ -5,7 +5,7 @@ module.exports = [
     config: {
       handler: (r, h) => {
         r.server.broadcast('welcome!')
-        return 'SENT'
+        return { result: 'SENT' }
       },
     },
   },
