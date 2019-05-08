@@ -24,6 +24,9 @@ module.exports = [
     method: 'GET',
     path: '/api/blog/posts',
     config: {
+      description: 'Get blog posts',
+      notes: 'Returns list of blog posts',
+      tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'Posts Call')
         const posts = await cache.get(POSTS_KEY)
@@ -40,6 +43,9 @@ module.exports = [
     method: 'GET',
     path: '/api/blog/posts/{slug}',
     config: {
+      description: 'Get a blog post',
+      notes: 'Returns blog post that matches slug',
+      tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'Post Call')
         const posts = await cache.get(POSTS_KEY)
@@ -56,6 +62,9 @@ module.exports = [
     method: 'GET',
     path: '/api/users',
     config: {
+      description: 'Get a list of users',
+      notes: 'Returns a list of users',
+      tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'Users Call')
         const users = await cache.get('all-users')
@@ -72,6 +81,9 @@ module.exports = [
     method: 'GET',
     path: '/api/products',
     config: {
+      description: 'Get a list of products',
+      notes: 'Returns a list of products',
+      tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'Products Call')
         const products = await cache.get(PRODUCTS_KEY)
@@ -88,6 +100,9 @@ module.exports = [
     method: 'GET',
     path: '/api/products/{id}',
     config: {
+      description: 'Get a product',
+      notes: 'Returns a product',
+      tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'Product Call')
         const products = await cache.get(PRODUCTS_KEY)
@@ -104,6 +119,9 @@ module.exports = [
     method: 'POST',
     path: '/api/echo',
     config: {
+      description: 'Return the entity posted',
+      notes: 'Returns the entity that is posted',
+      tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'ECHO Post')
         await delay(800)
@@ -115,6 +133,9 @@ module.exports = [
     method: 'POST',
     path: '/api/echo/{entity}',
     config: {
+      description: 'Return the entity posted',
+      notes: 'Returns the entity that is posted',
+      tags: ['api'],
       handler: async (request, h) => {
         await delay(1200)
         ga.event(GA_CATEGORY, `ECHO Entity ${request.params.entity} Post`)
