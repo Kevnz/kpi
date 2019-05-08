@@ -4,7 +4,7 @@ module.exports = [
     path: '/',
     config: {
       handler: (request, h) => {
-        return 'API'
+        return 'Rest and GraphQL API for development'
       },
     },
   },
