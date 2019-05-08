@@ -26,6 +26,15 @@ module.exports = [
     },
   },
   {
+    plugin: require('hapi-swagger'),
+    options: {
+      info: {
+        title: 'Kev-API Documentation',
+        version: '1.0.0',
+      },
+    },
+  },
+  {
     plugin: require('hapi-router'),
     options: {
       routes: ['src/server/routes/**/*.js'],
