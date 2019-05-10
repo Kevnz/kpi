@@ -158,4 +158,15 @@ module.exports = [
       },
     },
   },
+  {
+    method: 'POST',
+    path: '/api/cache/clear',
+    config: {
+      handler: async (request, h) => {
+        await cache.clear()
+        ga.event(GA_CATEGORY, `Cache Clear Post`)
+        return request.payload
+      },
+    },
+  },
 ]
