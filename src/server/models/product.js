@@ -20,11 +20,13 @@ const picArr = [
 ]
 const getPicture = category => {
   if (picArr.contains(category.toLoweCase())) {
-    return `http://lorempixel.com/320/240/${category}`
+    return `http://lorempixel.com/320/240/${category}?slide=${faker.random.number(
+      { min: 0, max: 1000 }
+    )}`
   }
   return `http://lorempixel.com/320/240/${
     picArr[faker.random.number({ min: 0, max: picArr.length - 1 })]
-  }`
+  }?slide=${faker.random.number({ min: 0, max: 1000 })}`
 }
 
 const createProduct = () => {
