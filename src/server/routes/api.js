@@ -131,6 +131,21 @@ module.exports = [
   },
   {
     method: 'POST',
+    path: '/api/long/wait',
+    config: {
+      description:
+        'Provides an endpoint that simulates a longer running process',
+      notes: 'Returns the entity that is posted after 2.4 seconds',
+      tags: ['api'],
+      handler: async (request, h) => {
+        ga.event(GA_CATEGORY, 'LONG WAIT Post')
+        await delay(2400)
+        return { ...request.payload, result: true }
+      },
+    },
+  },
+  {
+    method: 'POST',
     path: '/api/echo/{entity}',
     config: {
       description: 'Return the entity posted',
