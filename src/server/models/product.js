@@ -19,7 +19,8 @@ const picArr = [
   'transport',
 ]
 const getPicture = category => {
-  if (picArr.contains(category.toLoweCase())) {
+  console.log('cat', picArr)
+  if (picArr.includes(category.toLowerCase())) {
     return `http://lorempixel.com/320/240/${category}?slide=${faker.random.number(
       { min: 0, max: 1000 }
     )}`

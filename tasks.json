@@ -1,5 +1,12 @@
 {
   "lint": "eslint ./src",
+  "predev": [
+    "docker-compose -f ./docker/docker-compose.yml up --detach",
+    "node ./src/scripts/delay.js"
+  ],
   "dev": "nodemon ./src/server/index.js",
+  "cleanupdev": [
+    "docker-compose -f ./docker/docker-compose.yml down"
+  ],
   "start": "node ./src/server/index.js"
 }
