@@ -20,6 +20,7 @@ const typeDefs = gql`
     price: String
     category: String
     description: String
+    details: String
     image: String
   }
 

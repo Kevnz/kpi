@@ -86,6 +86,16 @@ module.exports = [
       tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'Products Call')
+        if (request.query.page) {
+          const page = parseInt(request.query.page, 10)
+          const products = await cache.get(`${PRODUCTS_KEY}-PAGE-${page}`)
+          if (products) {
+            return products
+          }
+          const genProds = Product.getAll()
+          cache.set(`${PRODUCTS_KEY}-PAGE-${page}`, genProds)
+          return genProds
+        }
         const products = await cache.get(PRODUCTS_KEY)
         if (products) {
           return products

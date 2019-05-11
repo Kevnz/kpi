@@ -19,7 +19,6 @@ const picArr = [
   'transport',
 ]
 const getPicture = category => {
-  console.log('cat', picArr)
   if (picArr.includes(category.toLowerCase())) {
     return `http://lorempixel.com/320/240/${category}?slide=${faker.random.number(
       { min: 0, max: 1000 }
@@ -38,6 +37,7 @@ const createProduct = () => {
     price: faker.commerce.price(),
     category,
     description: `${faker.commerce.productAdjective()} ${faker.commerce.productMaterial()}. ${faker.company.catchPhrase()}.`,
+    details: faker.lorem.paragraphs(10),
     image: getPicture(category),
   }
 }
