@@ -8,4 +8,15 @@ module.exports = [
       },
     },
   },
+  {
+    method: 'GET',
+    path: '/routes.table',
+    config: {
+      auth: false,
+      description: 'List routes table',
+      handler: (request, h) => {
+        return request.server.plugins.blipp.info()
+      },
+    },
+  },
 ]
