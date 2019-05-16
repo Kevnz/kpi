@@ -1,11 +1,16 @@
 const rooms = require('../utils/rooms')
+const ga = require('../utils/ga')
 
+const POST_CATEGORY = 'MESSAGE POST'
+const BROADCAST_CATEGORY = 'BROADCAST POST'
+const ROOMS_CATEGORY = 'ROOMS GET'
 module.exports = [
   {
     method: 'GET',
     path: '/broadcast',
     config: {
       handler: (r, h) => {
+        ga.event(BROADCAST_CATEGORY, `Broadcast called`)
         r.server.broadcast('welcome!')
         return { result: 'SENT' }
       },
@@ -17,6 +22,7 @@ module.exports = [
     config: {
       id: 'rooms',
       handler: (request, h) => {
+        ga.event(ROOMS_CATEGORY, `Get All Rooms`)
         return { rooms }
       },
     },
@@ -26,8 +32,9 @@ module.exports = [
     path: '/rooms/{id}',
     config: {
       id: 'rooms-by-id',
-      handler: (request, h) => {
-        return 'world!'
+      handler: (r, h) => {
+        ga.event(ROOMS_CATEGORY, `Get Room ${r.params.id}`)
+        return r.params.id
       },
     },
   },
@@ -37,6 +44,7 @@ module.exports = [
     config: {
       id: 'room-message',
       handler: (r, h) => {
+        ga.event(POST_CATEGORY, `Message Post to ${r.params.id}`)
         r.server.publish(`/rooms/${r.params.id}`, r.payload)
         return true
       },

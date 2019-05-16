@@ -32,7 +32,7 @@ const start = async () => {
       plugin: require('@hapi/nes'),
       options: {
         onConnection: socket => {
-          console.info('socket connected')
+          ga.event('SocketOperation', 'SocketConnection')
         },
       },
     })
