@@ -4,7 +4,7 @@ module.exports = [
     path: '/',
     config: {
       handler: (request, h) => {
-        return 'Rest and GraphQL API for development'
+        return 'A Rest, GraphQL, and NES API for development - See <a href="https://github.com/kevnz/kpi">https://github.com/kevnz/kpi</a>'
       },
     },
   },
