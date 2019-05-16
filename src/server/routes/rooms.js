@@ -37,7 +37,7 @@ module.exports = [
     config: {
       id: 'room-message',
       handler: (r, h) => {
-        r.server.publish(`/rooms$/{r.params.id}/`, r.payload)
+        r.server.publish(`/rooms/${r.params.id}`, r.payload)
         return true
       },
     },
