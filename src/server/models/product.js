@@ -20,13 +20,12 @@ const picArr = [
 ]
 const getPicture = category => {
   if (picArr.includes(category.toLowerCase())) {
-    return `https://lorempixel.com/320/240/${category}?slide=${faker.random.number(
-      { min: 0, max: 1000 }
-    )}`
+    // text=Visit+WhoIsHostingThis.com+Buyers+GuideC/O https://placeholder.com/
+    return `https://via.placeholder.com/320x240.jpg?text=${category}`
   }
-  return `https://lorempixel.com/320/240/${
-    picArr[faker.random.number({ min: 0, max: picArr.length - 1 })]
-  }?slide=${faker.random.number({ min: 0, max: 1000 })}`
+  return `https://via.placeholder.com/320x240.jpg?text=sample-number-${faker.random.number(
+    { min: 0, max: 1000 }
+  )}`
 }
 
 const createProduct = () => {
