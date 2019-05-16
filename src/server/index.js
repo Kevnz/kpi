@@ -40,7 +40,7 @@ const start = async () => {
     await server.applyMiddleware({
       app,
     })
-
+    app.subscription('/rooms/{id}')
     await app.start()
   } catch (err) {
     console.error(err)
