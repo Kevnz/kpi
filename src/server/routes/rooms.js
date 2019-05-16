@@ -15,7 +15,7 @@ module.exports = [
     method: 'GET',
     path: '/rooms',
     config: {
-      id: 'hello',
+      id: 'rooms',
       handler: (request, h) => {
         return { rooms }
       },
@@ -25,7 +25,7 @@ module.exports = [
     method: 'GET',
     path: '/rooms/{id}',
     config: {
-      id: 'hello',
+      id: 'rooms-by-id',
       handler: (request, h) => {
         return 'world!'
       },
@@ -35,10 +35,10 @@ module.exports = [
     method: 'POST',
     path: '/rooms/{id}/message',
     config: {
-      id: 'hello',
+      id: 'room-message',
       handler: (r, h) => {
         r.server.publish(`/rooms$/{r.params.id}/`, r.payload)
-        return 'world!'
+        return true
       },
     },
   },
