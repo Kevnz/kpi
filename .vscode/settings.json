@@ -19,6 +19,7 @@
     "tab.activeBorder": "#209cf0",
     "tab.activeBorderTop": "#209cf0",
     "tab.activeBackground": "#209cf0",
+    "tab.activeForeground": "#FFF",
     "statusBar.background": "#209cf0",
     "statusBar.foreground": "#FFFFFF"
   },
