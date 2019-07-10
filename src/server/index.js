@@ -41,6 +41,7 @@ const start = async () => {
       app,
     })
     app.subscription('/rooms/{id}')
+    app.subscription('/slides/{deck}')
     await app.start()
   } catch (err) {
     console.error(err)
