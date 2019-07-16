@@ -8,4 +8,7 @@ module.exports = {
   event: (cat, action) => {
     visitor.event(cat, action).send()
   },
+  exception: description => {
+    visitor.exception(description).send()
+  },
 }
