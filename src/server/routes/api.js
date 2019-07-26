@@ -1,5 +1,6 @@
 const Cache = require('@brightleaf/cache')
 const { delay } = require('@kev_nz/async-tools')
+const faker = require('faker')
 const { Post, User, Product } = require('../models')
 
 const ga = require('../utils/ga')
@@ -176,6 +177,48 @@ module.exports = [
         await cache.clear()
         ga.event(GA_CATEGORY, `Cache Clear Post`)
         return request.payload
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/mock/entities/entity',
+    config: {
+      handler: async (request, h) => {
+        const test =
+          '{ "firstName": "{{name.firstName}}", "lastName": "{{name.lastName}}","email": "{{internet.email}}"}'
+        const mockSchema = JSON.parse(request.headers.schema) || test
+
+        const s = faker.fake(`${mockSchema}`)
+        ga.event(GA_CATEGORY, `API ENTITY`)
+        return { entity: JSON.parse(s) }
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/mock/entities',
+    config: {
+      handler: async (request, h) => {
+        const test =
+          '{ "firstName": "{{name.firstName}}", "lastName": "{{name.lastName}}","email": "{{internet.email}}"}'
+        const mockSchema = request.headers.schema || test
+        const page = request.headers.page || 0
+        const total = request.headers.total || 200
+
+        const data = Array(10)
+          .fill(0)
+          .map(e => faker.fake(mockSchema))
+          .map(JSON.parse)
+
+        ga.event(GA_CATEGORY, `API ENTITIES`)
+        return {
+          data,
+          pagination: {
+            current: page,
+            total: total,
+          },
+        }
       },
     },
   },
