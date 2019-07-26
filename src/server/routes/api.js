@@ -209,7 +209,15 @@ module.exports = [
         const data = Array(10)
           .fill(0)
           .map(e => faker.fake(mockSchema))
-          .map(JSON.parse)
+          .map(e => {
+            return e.replace(/(\r\n|\n|\r)/gm, '')
+          })
+          .map((e, index) => {
+            return JSON.parse(e)
+          })
+          .map(e => {
+            return JSON.parse(e)
+          })
 
         ga.event(GA_CATEGORY, `API ENTITIES`)
         return {
@@ -223,3 +231,4 @@ module.exports = [
     },
   },
 ]
+;('{ "from": "{{name.findName}}", "timestamp": null, "subject": "{{lorem.sentence}}", "snippet": "{{lorem.lines}}", "fullMail": "{{lorem.paragraphs}}", "email": "{{internet.email}}" }')
