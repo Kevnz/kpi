@@ -212,8 +212,17 @@ module.exports = [
           .map(e => {
             return e.replace(/(\r\n|\n|\r)/gm, '')
           })
+          .map(e => {
+            console.log('e', e)
+            return e
+          })
           .map((e, index) => {
-            return JSON.parse(e)
+            try {
+              return JSON.parse(JSON.stringify(e))
+            } catch (err) {
+              console.log('error', err)
+              return {}
+            }
           })
           .map(e => {
             return JSON.parse(e)
