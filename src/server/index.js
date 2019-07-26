@@ -24,7 +24,13 @@ const start = async () => {
         },
         cors: {
           origin: ['*'],
-          additionalHeaders: ['x-media-server', 'content-type'],
+          additionalHeaders: [
+            'x-kpi-server',
+            'content-type',
+            'schema',
+            'page',
+            'total',
+          ],
         },
       },
     })
