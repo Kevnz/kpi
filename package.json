@@ -3,33 +3,35 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./src/server/index.js"
+    "start": "node ./src/server/index.js",
+    "dev": "isom dev"
   },
   "dependencies": {
     "@brightleaf/cache": "^1.0.3",
-    "@hapi/nes": "^11.1.0",
-    "@kev_nz/async-tools": "^1.2.1",
-    "apollo-server-hapi": "^2.4.8",
+    "@hapi/hapi": "^18.3.1",
+    "@hapi/nes": "^11.2.0",
+    "@kev_nz/async-tools": "^1.2.3",
+    "apollo-server-hapi": "^2.8.1",
     "blipp": "^4.0.0",
     "faker": "^4.1.0",
     "good": "^8.1.2",
     "good-console": "^8.0.0",
-    "graphql": "^14.2.1",
-    "hapi": "^18.1.0",
+    "graphql": "^14.4.2",
     "hapi-cors-headers": "^1.0.3",
-    "hapi-router": "^4.0.0",
-    "hapi-swagger": "^9.4.2",
+    "hapi-router": "^5.0.0",
+    "hapi-swagger": "^10.0.2",
     "inert": "^5.1.3",
     "isom": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
+    "r2": "^2.0.1",
     "universal-analytics": "^0.4.20",
     "vision": "^5.4.4",
     "xtconf": "^4.1.0"
   },
   "devDependencies": {
-    "@kev_nz/eslint-config": "^3.3.0",
-    "eslint": "^5.16.0",
+    "@kev_nz/eslint-config": "^4.0.0",
+    "eslint": "^6.1.0",
     "jest": "^24.8.0",
-    "nodemon": "^1.19.0"
+    "nodemon": "^1.19.1"
   }
 }
