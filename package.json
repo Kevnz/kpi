@@ -13,6 +13,7 @@
     "@kev_nz/async-tools": "^1.2.3",
     "apollo-server-hapi": "^2.8.1",
     "blipp": "^4.0.0",
+    "days-in-a-row": "^2.0.1",
     "faker": "^4.1.0",
     "good": "^8.1.2",
     "good-console": "^8.0.0",
