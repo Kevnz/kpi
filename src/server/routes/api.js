@@ -239,5 +239,64 @@ module.exports = [
       },
     },
   },
+  {
+    method: 'GET',
+    path: '/api/items',
+    config: {
+      handler: async (request, h) => {
+        ga.event(GA_CATEGORY, `API ALL ITEMS`)
+
+        const items = await cache.get('all-items')
+        if (items) {
+          return items
+        }
+        return []
+      },
+    },
+  },
+  {
+    method: 'PUT',
+    path: '/api/items/{id}',
+    config: {
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, `API PUT ITEM`)
+
+        await cache.set(`item:${r.params.id}`, r.payload)
+        const item = await cache.get(`item:${r.params.id}`)
+        return {
+          saved: true,
+          item: item,
+        }
+      },
+    },
+  },
+  {
+    method: 'POST',
+    path: '/api/items',
+    config: {
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, `API POST ITEM`)
+        await cache.set(`item:${r.payload.id}`, r.payload)
+        const item = await cache.get(`item:${r.payload.id}`)
+        return {
+          saved: true,
+          item: item,
+        }
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/items/{id}',
+    config: {
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, `API GET ITEM`)
+        const item = await cache.get(`item:${r.params.id}`)
+        if (item) {
+          return item
+        }
+        h.response('not found').code(404)
+      },
+    },
+  },
 ]
-;('{ "from": "{{name.findName}}", "timestamp": null, "subject": "{{lorem.sentence}}", "snippet": "{{lorem.lines}}", "fullMail": "{{lorem.paragraphs}}", "email": "{{internet.email}}" }')
