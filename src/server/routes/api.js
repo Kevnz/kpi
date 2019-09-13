@@ -305,4 +305,23 @@ module.exports = [
       },
     },
   },
+  {
+    method: 'GET',
+    path: '/api/clear/items',
+    config: {
+      handler: async (request, h) => {
+        ga.event(GA_CATEGORY, `API ALL ITEMS CLEAR`)
+
+        const itemKeys = await cache.redis.keys('*item*')
+        const cleaned = itemKeys.map(k => k.replace('kpi-', ''))
+        console.log('cleaned key', cleaned)
+        if (cleaned) {
+          await mapper(cleaned, k => cache.delete(k))
+
+          return { cleared: true }
+        }
+        return { cleared: false }
+      },
+    },
+  },
 ]
