@@ -246,7 +246,7 @@ module.exports = [
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, `API ALL ITEMS`)
 
-        const items = await cache.get('all-items')
+        const items = await cache.client.keys('*item*')
         if (items) {
           return items
         }
