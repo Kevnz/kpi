@@ -248,7 +248,9 @@ module.exports = [
 
         const itemKeys = await cache.redis.keys('*item*')
         if (itemKeys) {
-          return mapper(itemKeys, k => cache.redis.get(k))
+          const items = await mapper(itemKeys, k => cache.redis.get(k))
+          console.log('items', items)
+          return items
         }
         return []
       },
