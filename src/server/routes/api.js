@@ -252,8 +252,9 @@ module.exports = [
         if (cleaned) {
           const items = await mapper(cleaned, k => cache.get(k))
           console.log('items', items)
-
-          return items
+          const parsedItems = items.map(item => JSON.parse(item))
+          console.log('parsed', parsedItems)
+          return parsedItems
         }
         return []
       },
