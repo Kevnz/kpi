@@ -324,4 +324,89 @@ module.exports = [
       },
     },
   },
+  {
+    method: 'GET',
+    path: '/api/projects',
+    config: {
+      handler: async (request, h) => {
+        ga.event(GA_CATEGORY, `API ALL ITEMS`)
+
+        const itemKeys = await cache.redis.keys('*project*')
+        const cleaned = itemKeys.map(k => k.replace('kpi-', ''))
+        console.log('cleaned key', cleaned)
+        if (cleaned) {
+          const items = await mapper(cleaned, k => cache.get(k))
+          console.log('projects', items)
+          const parsedItems = items.map(item => JSON.parse(item))
+          console.log('parsed projects', parsedItems)
+          return parsedItems
+        }
+        return []
+      },
+    },
+  },
+  {
+    method: 'PUT',
+    path: '/api/projects/{id}',
+    config: {
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, `API PUT PROJECT`)
+
+        await cache.set(`project:${r.params.id}`, r.payload)
+        const item = await cache.get(`project:${r.params.id}`)
+        return {
+          saved: true,
+          item: item,
+        }
+      },
+    },
+  },
+  {
+    method: 'POST',
+    path: '/api/projects',
+    config: {
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, `API POST PROJECT`)
+        await cache.set(`project:${r.payload.id}`, r.payload)
+        const item = await cache.get(`project:${r.payload.id}`)
+        return {
+          saved: true,
+          item: item,
+        }
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/projects/{id}',
+    config: {
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, `API GET PROJECT`)
+        const item = await cache.get(`project:${r.params.id}`)
+        if (item) {
+          return item
+        }
+        h.response('not found').code(404)
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/clear/projects',
+    config: {
+      handler: async (request, h) => {
+        ga.event(GA_CATEGORY, `API ALL PROJECTS CLEAR`)
+
+        const itemKeys = await cache.redis.keys('*project*')
+        const cleaned = itemKeys.map(k => k.replace('kpi-', ''))
+        console.log('cleaned key', cleaned)
+        if (cleaned) {
+          await mapper(cleaned, k => cache.delete(k))
+
+          return { cleared: true }
+        }
+        return { cleared: false }
+      },
+    },
+  },
 ]
