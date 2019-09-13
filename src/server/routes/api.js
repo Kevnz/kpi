@@ -247,12 +247,13 @@ module.exports = [
         ga.event(GA_CATEGORY, `API ALL ITEMS`)
 
         const itemKeys = await cache.redis.keys('*item*')
-        if (itemKeys) {
-          const items = await mapper(itemKeys, k => cache.redis.get(k))
+        const cleaned = itemKeys.map(k => k.replace('kpi-', ''))
+        console.log('cleaned key', cleaned)
+        if (cleaned) {
+          const items = await mapper(cleaned, k => cache.get(k))
           console.log('items', items)
-          const parsed = items.map(i => JSON.parse(i))
-          console.log('parsed items', parsed)
-          return parsed
+
+          return items
         }
         return []
       },
