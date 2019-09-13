@@ -1,5 +1,5 @@
 const Cache = require('@brightleaf/cache')
-const { delay } = require('@kev_nz/async-tools')
+const { delay, mapper } = require('@kev_nz/async-tools')
 const faker = require('faker')
 const { Post, User, Product } = require('../models')
 
@@ -246,9 +246,9 @@ module.exports = [
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, `API ALL ITEMS`)
 
-        const items = await cache.redis.keys('*item*')
-        if (items) {
-          return items
+        const itemKeys = await cache.redis.keys('*item*')
+        if (itemKeys) {
+          return mapper(itemKeys, k => cache.redis.get(k))
         }
         return []
       },
