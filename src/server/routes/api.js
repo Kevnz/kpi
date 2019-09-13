@@ -250,7 +250,9 @@ module.exports = [
         if (itemKeys) {
           const items = await mapper(itemKeys, k => cache.redis.get(k))
           console.log('items', items)
-          return items.map(JSON.parse)
+          const parsed = items.map(i => JSON.parse(i))
+          console.log('parsed items', parsed)
+          return parsed
         }
         return []
       },
