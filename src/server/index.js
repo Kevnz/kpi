@@ -37,6 +37,7 @@ const start = async () => {
     await app.register({
       plugin: require('@hapi/nes'),
       options: {
+        heartbeat: false,
         onConnection: socket => {
           ga.event('SocketOperation', 'SocketConnection')
         },
