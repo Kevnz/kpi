@@ -42,6 +42,7 @@ const start = async () => {
           ga.event('SocketOperation', 'SocketConnection')
         },
         onMessage: (socket, message) => {
+          ga.event('SocketOperation', 'SocketMessage')
           app.broadcast(message)
         },
       },
