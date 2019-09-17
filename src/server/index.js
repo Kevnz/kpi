@@ -41,6 +41,9 @@ const start = async () => {
         onConnection: socket => {
           ga.event('SocketOperation', 'SocketConnection')
         },
+        onMessage: (socket, message) => {
+          app.broadcast(message)
+        },
       },
     })
     await app.register(Manifest)
@@ -48,6 +51,7 @@ const start = async () => {
       app,
     })
     app.subscription('/rooms/{id}')
+
     app.subscription('/slides/{deck}')
     await app.start()
   } catch (err) {
