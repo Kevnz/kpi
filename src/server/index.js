@@ -38,6 +38,10 @@ const start = async () => {
       plugin: require('@hapi/nes'),
       options: {
         heartbeat: false,
+        onDisconnection: () => {
+          console.info('onDisconnection')
+          ga.event('SocketOperation', 'SocketDisconnection')
+        },
         onConnection: socket => {
           console.info('onConnection')
           ga.event('SocketOperation', 'SocketConnection')
