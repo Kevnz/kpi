@@ -39,9 +39,11 @@ const start = async () => {
       options: {
         heartbeat: false,
         onConnection: socket => {
+          console.info('onConnection')
           ga.event('SocketOperation', 'SocketConnection')
         },
         onMessage: (socket, message) => {
+          console.info('message', message)
           ga.event('SocketOperation', 'SocketMessage')
           app.broadcast(message)
         },
