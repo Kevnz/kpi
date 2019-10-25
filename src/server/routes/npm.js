@@ -111,7 +111,11 @@ module.exports = [
       handler: async (r, h) => {
         ga.event(GA_CATEGORY, 'Get My Info Call')
         const today = dateMath.subtract(new Date(), 1, 'day')
-        const lastWeek = dateMath.subtract(today, 1, 'week')
+        const lastWeek = dateMath.add(
+          dateMath.subtract(today, 1, 'week'),
+          1,
+          'day'
+        )
         const diff = dateMath.diff(lastWeek, today, 'day', false)
         console.log('diff', diff)
         const holder = new Array(diff + 1).fill(0)
