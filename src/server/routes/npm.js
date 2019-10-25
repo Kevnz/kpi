@@ -61,7 +61,7 @@ module.exports = [
   },
   {
     method: 'GET',
-    path: '/api/package/weekly',
+    path: '/api/package/weekly1',
     config: {
       description: 'Get info on me',
       notes: 'Returns list of blog posts',
@@ -98,6 +98,52 @@ module.exports = [
         )
 
         return { breakdown: weeklyResults, totals: result }
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/package/weekly',
+    config: {
+      description: 'Get info on me',
+      notes: 'Returns list of blog posts',
+      tags: ['api'],
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, 'Get My Info Call')
+        const today = dateMath.subtract(new Date(), 1, 'day')
+        const lastWeek = dateMath.subtract(today, 1, 'week')
+        const diff = dateMath.diff(lastWeek, today, 'day', false)
+        console.log('diff', diff)
+        const holder = new Array(diff + 1).fill(0)
+        const ranges = holder.map((v, index) => {
+          const dt = ymd(dateMath.subtract(today, index, 'day'))
+
+          return `${dt.year}-${dt.month}-${dt.day}`
+        })
+
+        const mappedRanges = ranges.map((d, i) => {
+          if (i === ranges.length) return ''
+          return `${d}:${d}`
+        })
+        // mappedRanges.pop()
+
+        const start = ymd(lastWeek)
+        const end = ymd(today)
+        const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
+        const result = await pkgDownloads(r.query.pkg, dateRange)
+
+        const weeklyResults = await mapper(
+          mappedRanges.reverse(),
+          async range => {
+            const result = await pkgDownloads(r.query.pkg, range)
+            await delay(100)
+            return result
+          }
+        )
+        const reduced = weeklyResults.reduce((accumulator, current) => {
+          return accumulator + current.downloads
+        }, 0)
+        return { breakdown: weeklyResults, totals: result, addedUp: reduced }
       },
     },
   },
