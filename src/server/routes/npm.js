@@ -26,13 +26,13 @@ module.exports = [
       notes: 'Returns downloads',
       tags: ['api'],
       handler: async (r, h) => {
-        ga.event(GA_CATEGORY, 'Package stats')
+        ga.event(GA_CATEGORY, 'NPM Package stats')
         const today = dateMath.subtract(new Date(), 1, 'day')
         const yesterday = dateMath.subtract(today, 1, 'day')
         const start = ymd(yesterday)
         const end = ymd(today)
         const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
-        console.log('date-range', dateRange)
+        console.info('date-range', dateRange)
         const result = await pkgDownloads(r.query.pkg, dateRange)
         console.info('result', result)
         return result
@@ -43,11 +43,11 @@ module.exports = [
     method: 'GET',
     path: '/api/package/week',
     config: {
-      description: 'Get info on me',
-      notes: 'Returns list of blog posts',
+      description: 'Get downloads for the week',
+      notes: 'Returns downloads',
       tags: ['api'],
       handler: async (r, h) => {
-        ga.event(GA_CATEGORY, 'Get My Info Call')
+        ga.event(GA_CATEGORY, 'NPM Package Week')
         const today = dateMath.subtract(new Date(), 1, 'day')
         const lastWeek = dateMath.subtract(today, 1, 'week')
         const start = ymd(lastWeek)
@@ -63,11 +63,11 @@ module.exports = [
     method: 'GET',
     path: '/api/package/weekly1',
     config: {
-      description: 'Get info on me',
-      notes: 'Returns list of blog posts',
+      description: 'Get downloads for the week 1?',
+      notes: 'Returns info on package for a week',
       tags: ['api'],
       handler: async (r, h) => {
-        ga.event(GA_CATEGORY, 'Get My Info Call')
+        ga.event(GA_CATEGORY, 'NPM Weekly1')
         const today = dateMath.subtract(new Date(), 1, 'day')
         const holder = new Array(8).fill(0)
         const ranges = holder.map((v, index) => {
@@ -105,19 +105,20 @@ module.exports = [
     method: 'GET',
     path: '/api/package/weekly',
     config: {
-      description: 'Get info on me',
-      notes: 'Returns list of blog posts',
+      description: 'Get downloads for the week',
+      notes: 'Get downloads for the week',
       tags: ['api'],
       handler: async (r, h) => {
-        ga.event(GA_CATEGORY, 'Get My Info Call')
-        const today = dateMath.subtract(new Date(), 1, 'day')
+        ga.event(GA_CATEGORY, 'NPM Weekly')
+        const back = parseInt(r.query.back || '1', 10)
+        const today = dateMath.subtract(new Date(), back, 'day')
         const lastWeek = dateMath.add(
           dateMath.subtract(today, 1, 'week'),
           1,
           'day'
         )
         const diff = dateMath.diff(lastWeek, today, 'day', false)
-        console.log('diff', diff)
+
         const holder = new Array(diff + 1).fill(0)
         const ranges = holder.map((v, index) => {
           const dt = ymd(dateMath.subtract(today, index, 'day'))
@@ -155,15 +156,16 @@ module.exports = [
     method: 'GET',
     path: '/api/package/monthly',
     config: {
-      description: 'Get info on me',
+      description: 'Get downloads for the month',
       notes: 'Returns list of blog posts',
       tags: ['api'],
       handler: async (r, h) => {
-        ga.event(GA_CATEGORY, 'Get My Info Call')
-        const today = dateMath.subtract(new Date(), 1, 'day')
+        ga.event(GA_CATEGORY, 'NPM Monthly')
+        const back = parseInt(r.query.back || '1', 10)
+        const today = dateMath.subtract(new Date(), back, 'day')
         const lastMonth = dateMath.subtract(today, 1, 'month')
         const diff = dateMath.diff(lastMonth, today, 'day', false)
-        console.log('diff', diff)
+        console.info('Monthly Diff', diff)
         const holder = new Array(diff + 1).fill(0)
         const ranges = holder.map((v, index) => {
           const dt = ymd(dateMath.subtract(today, index, 'day'))
@@ -194,6 +196,32 @@ module.exports = [
           return accumulator + current.downloads
         }, 0)
         return { breakdown: monthlyResults, totals: result, addedUp: reduced }
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/package/daily',
+    config: {
+      description: 'Get info on me',
+      notes: 'Returns downloads for a day',
+      tags: ['api'],
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, 'NPM Daily')
+        const back = parseInt(r.query.back || '1', 10)
+        const today = dateMath.subtract(new Date(), back, 'day')
+
+        const yesterday = dateMath.subtract(today, 1, 'day')
+        const start = ymd(yesterday)
+        const end = ymd(today)
+        const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
+
+        const result = await pkgDownloads(r.query.pkg, dateRange)
+
+        console.info('date-range', dateRange)
+
+        console.info('result', result)
+        return result
       },
     },
   },
