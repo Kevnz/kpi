@@ -29,14 +29,20 @@ module.exports = [
         return {
           name: 'Kevin Isom',
           website: 'https://kevinisom.info',
-          twitter: 'https://twitter.com/kev_nz',
-          linkedin: 'https://www.linkedin.com/in/kevinisom/',
-          github: 'https://github.com/kevnz',
-          dev: 'https://dev.to/kevnz/',
+          twitter: { url: 'https://twitter.com/kev_nz', user: 'kev_nz' },
+          linkedin: {
+            url: 'https://www.linkedin.com/in/kevinisom/',
+            user: 'kevinisom',
+          },
+          github: { url: 'https://github.com/kevnz', user: 'kevnz' },
+          dev: { url: 'https://dev.to/kevnz/', user: 'kevnz' },
           links: [
             { name: 'Brightleaf JS', url: 'https://brightleaf.dev' },
             { name: 'JavaScript Rodeo', url: 'https://javascript.rodeo' },
             { name: 'AkJS Meetup', url: 'https://akjs.nz' },
+            { name: 'Kevin Isom', url: 'https://kevinisom.info' },
+            { name: 'My Home Page', url: 'https://kevnz.xyz' },
+            { name: 'The Forge', url: 'https://forge.kevnz.xyz' },
           ],
           tagline:
             'Developer, Mentor, Organizer. Runs @akjs_meetup and helps with @akl_node and @javascript_nz, so yes, I like JavaScript',
