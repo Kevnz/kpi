@@ -37,12 +37,36 @@ module.exports = [
           github: { url: 'https://github.com/kevnz', user: 'kevnz' },
           dev: { url: 'https://dev.to/kevnz/', user: 'kevnz' },
           links: [
-            { name: 'Brightleaf JS', url: 'https://brightleaf.dev' },
-            { name: 'JavaScript Rodeo', url: 'https://javascript.rodeo' },
-            { name: 'AkJS Meetup', url: 'https://akjs.nz' },
-            { name: 'Kevin Isom', url: 'https://kevinisom.info' },
-            { name: 'My Home Page', url: 'https://kevnz.xyz' },
-            { name: 'The Forge', url: 'https://forge.kevnz.xyz' },
+            {
+              name: 'Brightleaf JS',
+              url: 'https://brightleaf.dev',
+              details: 'Brightleaf JS Projects',
+            },
+            {
+              name: 'JavaScript Rodeo',
+              url: 'https://javascript.rodeo',
+              details: 'Pretty pictures of code',
+            },
+            {
+              name: 'AkJS Meetup',
+              url: 'https://akjs.nz',
+              details: 'The Auckland JavaScript meetup',
+            },
+            {
+              name: 'Kevin Isom',
+              url: 'https://kevinisom.info',
+              details: 'Details on me',
+            },
+            {
+              name: 'My Home Page',
+              url: 'https://kevnz.xyz',
+              details: 'A collection of day to day links',
+            },
+            {
+              name: 'The Forge',
+              url: 'https://forge.kevnz.xyz',
+              details: 'Try to make things',
+            },
           ],
           tagline:
             'Developer, Mentor, Organizer. Runs @akjs_meetup and helps with @akl_node and @javascript_nz, so yes, I like JavaScript',
