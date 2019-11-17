@@ -235,9 +235,10 @@ module.exports = [
           mappedRanges.reverse(),
           async range => {
             const result = await pkgDownloads(r.query.pkg, range)
-            await delay(100)
+            await delay(120)
             return result
-          }
+          },
+          10
         )
         const reduced = monthlyResults.reduce((accumulator, current) => {
           return accumulator + current.downloads
