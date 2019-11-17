@@ -239,9 +239,58 @@ module.exports = [
           mappedRanges.reverse(),
           async range => {
             const result = await pkgDownloads(r.query.pkg, range)
-            await delay(100)
+            await delay(110)
             return result
-          }
+          },
+          10
+        )
+        const reduced = monthlyResults.reduce((accumulator, current) => {
+          return accumulator + current.downloads
+        }, 0)
+        return { breakdown: monthlyResults, totals: result, addedUp: reduced }
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/api/package/bimonthly',
+    config: {
+      description: 'Get downloads for the month',
+      notes: 'Returns list of blog posts',
+      tags: ['api'],
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, 'NPM Monthly')
+        const back = parseInt(r.query.back || '1', 10)
+        const today = dateMath.subtract(new Date(), back, 'day')
+        const lastMonth = dateMath.subtract(today, 2, 'month')
+        const diff = dateMath.diff(lastMonth, today, 'day', false)
+        console.info('Monthly Diff', diff)
+        const holder = new Array(diff + 1).fill(0)
+        const ranges = holder.map((v, index) => {
+          const dt = ymd(dateMath.subtract(today, index, 'day'))
+
+          return `${dt.year}-${dt.month}-${dt.day}`
+        })
+
+        const mappedRanges = ranges.map((d, i) => {
+          if (i === ranges.length) return ''
+          return `${d}:${d}`
+        })
+        // mappedRanges.pop()
+
+        const start = ymd(lastMonth)
+        const end = ymd(today)
+        const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
+        const result = await pkgDownloads(r.query.pkg, dateRange)
+
+        const monthlyResults = await mapper(
+          mappedRanges.reverse(),
+          async range => {
+            const result = await pkgDownloads(r.query.pkg, range)
+            await delay(120)
+            return result
+          },
+          5
         )
         const reduced = monthlyResults.reduce((accumulator, current) => {
           return accumulator + current.downloads
