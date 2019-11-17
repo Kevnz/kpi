@@ -201,6 +201,53 @@ module.exports = [
   },
   {
     method: 'GET',
+    path: '/api/package/yearly',
+    config: {
+      description: 'Get downloads for the year',
+      notes: 'Returns list of blog posts',
+      tags: ['api'],
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, 'NPM Yearly')
+        const back = parseInt(r.query.back || '1', 10)
+        const today = dateMath.subtract(new Date(), back, 'day')
+        const lastYear = dateMath.subtract(today, 1, 'year')
+        const diff = dateMath.diff(lastYear, today, 'day', false)
+        console.info('Yearly Diff', diff)
+        const holder = new Array(diff + 1).fill(0)
+        const ranges = holder.map((v, index) => {
+          const dt = ymd(dateMath.subtract(today, index, 'day'))
+
+          return `${dt.year}-${dt.month}-${dt.day}`
+        })
+
+        const mappedRanges = ranges.map((d, i) => {
+          if (i === ranges.length) return ''
+          return `${d}:${d}`
+        })
+        // mappedRanges.pop()
+
+        const start = ymd(lastYear)
+        const end = ymd(today)
+        const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
+        const result = await pkgDownloads(r.query.pkg, dateRange)
+
+        const monthlyResults = await mapper(
+          mappedRanges.reverse(),
+          async range => {
+            const result = await pkgDownloads(r.query.pkg, range)
+            await delay(100)
+            return result
+          }
+        )
+        const reduced = monthlyResults.reduce((accumulator, current) => {
+          return accumulator + current.downloads
+        }, 0)
+        return { breakdown: monthlyResults, totals: result, addedUp: reduced }
+      },
+    },
+  },
+  {
+    method: 'GET',
     path: '/api/package/daily',
     config: {
       description: 'Get info on me',
