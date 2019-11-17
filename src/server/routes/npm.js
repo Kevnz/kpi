@@ -154,6 +154,57 @@ module.exports = [
   },
   {
     method: 'GET',
+    path: '/api/package/fortnightly',
+    config: {
+      description: 'Get downloads for the week',
+      notes: 'Get downloads for the week',
+      tags: ['api'],
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, 'NPM Weekly')
+        const back = parseInt(r.query.back || '1', 10)
+        const today = dateMath.subtract(new Date(), back, 'day')
+        const lastWeek = dateMath.add(
+          dateMath.subtract(today, 2, 'week'),
+          1,
+          'day'
+        )
+        const diff = dateMath.diff(lastWeek, today, 'day', false)
+
+        const holder = new Array(diff + 1).fill(0)
+        const ranges = holder.map((v, index) => {
+          const dt = ymd(dateMath.subtract(today, index, 'day'))
+
+          return `${dt.year}-${dt.month}-${dt.day}`
+        })
+
+        const mappedRanges = ranges.map((d, i) => {
+          if (i === ranges.length) return ''
+          return `${d}:${d}`
+        })
+        // mappedRanges.pop()
+
+        const start = ymd(lastWeek)
+        const end = ymd(today)
+        const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
+        const result = await pkgDownloads(r.query.pkg, dateRange)
+
+        const weeklyResults = await mapper(
+          mappedRanges.reverse(),
+          async range => {
+            const result = await pkgDownloads(r.query.pkg, range)
+            await delay(100)
+            return result
+          }
+        )
+        const reduced = weeklyResults.reduce((accumulator, current) => {
+          return accumulator + current.downloads
+        }, 0)
+        return { breakdown: weeklyResults, totals: result, addedUp: reduced }
+      },
+    },
+  },
+  {
+    method: 'GET',
     path: '/api/package/monthly',
     config: {
       description: 'Get downloads for the month',
