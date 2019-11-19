@@ -360,4 +360,20 @@ module.exports = [
       },
     },
   },
+  {
+    method: 'GET',
+    path: '/api/package/details',
+    config: {
+      description: 'Get info on npm package',
+      notes: 'Returns package info',
+      tags: ['api'],
+      handler: async (r, h) => {
+        ga.event(GA_CATEGORY, 'NPM Package Details')
+        const { pkg } = r.query
+        const results = await r2.get(`https://registry.npmjs.org/${pkg}`).json
+        console.info('got')
+        return results
+      },
+    },
+  },
 ]
