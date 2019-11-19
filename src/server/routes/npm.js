@@ -1,4 +1,5 @@
 const Cache = require('@brightleaf/cache')
+const r2 = require('r2')
 const { delay, mapper } = require('@kev_nz/async-tools')
 const dateMath = require('date-arithmetic')
 const ymd = require('year-month-day')
@@ -308,27 +309,30 @@ module.exports = [
       tags: ['api'],
       handler: async (r, h) => {
         ga.event(GA_CATEGORY, 'NPM Yearly')
-
-        const results = await pkgDownloads(r.query.pkg, 'last-year')
-        const breakdown = results.map(r => {
+        const { pkg } = r.query
+        const results = await r2.get(
+          `https://api.npmjs.org/downloads/range/last-year/${pkg}`
+        ).json
+        console.log('results', results)
+        const breakdown = results.downloads.map(r => {
           return {
             downloads: r.downloads,
             start: r.day,
             end: r.day,
-            package: r.query.pkg,
+            package: pkg,
           }
         })
 
-        const reduced = results.reduce((accumulator, current) => {
+        const reduced = breakdown.reduce((accumulator, current) => {
           return accumulator + current.downloads
         }, 0)
         return {
           breakdown,
           totals: {
             downloads: reduced,
-            start: results[0].day,
-            end: results[results.length - 1].day,
-            package: r.query.pkg,
+            start: results.downloads[0].day,
+            end: results.downloads[results.downloads.length - 1].day,
+            package: pkg,
           },
           addedUp: reduced,
         }
@@ -352,7 +356,7 @@ module.exports = [
         const end = ymd(today)
         const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
 
-        return await pkgDownloads(r.query.pkg, dateRange)
+        return pkgDownloads(r.query.pkg, dateRange)
       },
     },
   },
