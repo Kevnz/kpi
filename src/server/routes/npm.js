@@ -1,5 +1,6 @@
 const Cache = require('@brightleaf/cache')
 const r2 = require('r2')
+const fetch = require('node-fetch')
 const { delay, mapper } = require('@kev_nz/async-tools')
 const dateMath = require('date-arithmetic')
 const ymd = require('year-month-day')
@@ -370,8 +371,40 @@ module.exports = [
       handler: async (r, h) => {
         ga.event(GA_CATEGORY, 'NPM Package Details')
         const { pkg } = r.query
-        const results = await r2.get(`https://registry.npmjs.org/${pkg}`).json
-        console.info('got')
+        console.log(`https://registry.npmjs.org/${pkg}`)
+        /*
+        const gotten = await r2.get(`https://registry.npmjs.org/${pkg}`, {
+          headers: {
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:70.0) Gecko/20100101 Firefox/70.0',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Upgrade-Insecure-Requests': '1',
+            Pragma: 'no-cache',
+            'Cache-Control': 'no-cache',
+          },
+        })
+        */
+        const gotten = await fetch(
+          'https://registry.npmjs.org/@brightleaf/elements',
+          {
+            credentials: 'include',
+            headers: {
+              'User-Agent':
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:70.0) Gecko/20100101 Firefox/70.0',
+              Accept:
+                'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+              'Accept-Language': 'en-US,en;q=0.5',
+              'Upgrade-Insecure-Requests': '1',
+              Pragma: 'no-cache',
+              'Cache-Control': 'no-cache',
+            },
+            method: 'GET',
+            mode: 'cors',
+          }
+        )
+        console.log('gotten', gotten)
+        const results = await gotten.json()
+        console.info('got', results)
         return results
       },
     },
