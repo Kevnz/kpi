@@ -308,42 +308,30 @@ module.exports = [
       tags: ['api'],
       handler: async (r, h) => {
         ga.event(GA_CATEGORY, 'NPM Yearly')
-        const back = parseInt(r.query.back || '1', 10)
-        const today = dateMath.subtract(new Date(), back, 'day')
-        const lastYear = dateMath.subtract(today, 1, 'year')
-        const diff = dateMath.diff(lastYear, today, 'day', false)
-        console.info('Yearly Diff', diff)
-        const holder = new Array(diff + 1).fill(0)
-        const ranges = holder.map((v, index) => {
-          const dt = ymd(dateMath.subtract(today, index, 'day'))
 
-          return `${dt.year}-${dt.month}-${dt.day}`
+        const results = await pkgDownloads(r.query.pkg, 'last-year')
+        const breakdown = results.map(r => {
+          return {
+            downloads: r.downloads,
+            start: r.day,
+            end: r.day,
+            package: r.query.pkg,
+          }
         })
 
-        const mappedRanges = ranges.map((d, i) => {
-          if (i === ranges.length) return ''
-          return `${d}:${d}`
-        })
-        // mappedRanges.pop()
-
-        const start = ymd(lastYear)
-        const end = ymd(today)
-        const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
-        const result = await pkgDownloads(r.query.pkg, dateRange)
-
-        const monthlyResults = await mapper(
-          mappedRanges.reverse(),
-          async range => {
-            const result = await pkgDownloads(r.query.pkg, range)
-            await delay(120)
-            return result
-          },
-          10
-        )
-        const reduced = monthlyResults.reduce((accumulator, current) => {
+        const reduced = results.reduce((accumulator, current) => {
           return accumulator + current.downloads
         }, 0)
-        return { breakdown: monthlyResults, totals: result, addedUp: reduced }
+        return {
+          breakdown,
+          totals: {
+            downloads: reduced,
+            start: results[0].day,
+            end: results[results.length - 1].day,
+            package: r.query.pkg,
+          },
+          addedUp: reduced,
+        }
       },
     },
   },
@@ -364,12 +352,7 @@ module.exports = [
         const end = ymd(today)
         const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
 
-        const result = await pkgDownloads(r.query.pkg, dateRange)
-
-        console.info('date-range', dateRange)
-
-        console.info('result', result)
-        return result
+        return await pkgDownloads(r.query.pkg, dateRange)
       },
     },
   },
