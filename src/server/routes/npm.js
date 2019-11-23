@@ -355,7 +355,7 @@ module.exports = [
         const yesterday = dateMath.subtract(today, 1, 'day')
         const start = ymd(yesterday)
         const end = ymd(today)
-        const dateRange = `${start.year}-${start.month}-${start.day}:${end.year}-${end.month}-${end.day}`
+        const dateRange = `${end.year}-${end.month}-${end.day}:${end.year}-${end.month}-${end.day}`
 
         return pkgDownloads(r.query.pkg, dateRange)
       },
