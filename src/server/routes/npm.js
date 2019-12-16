@@ -242,7 +242,13 @@ module.exports = [
           async range => {
             const result = await pkgDownloads(r.query.pkg, range)
             await delay(110)
-            return result
+
+            return {
+              downloads: result[0].downloads,
+              start: result[0].day,
+              end: result[0].day,
+              package: r.query.pkg,
+            }
           },
           10
         )
