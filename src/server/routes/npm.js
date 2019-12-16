@@ -95,7 +95,12 @@ module.exports = [
           async range => {
             const result = await pkgDownloads(r.query.pkg, range)
             await delay(100)
-            return result
+            return {
+              downloads: result.downloads[0].downloads,
+              start: result.downloads[0].day,
+              end: result.downloads[0].day,
+              package: r.query.pkg,
+            }
           }
         )
 
@@ -144,7 +149,12 @@ module.exports = [
           async range => {
             const result = await pkgDownloads(r.query.pkg, range)
             await delay(100)
-            return result
+            return {
+              downloads: result.downloads[0].downloads,
+              start: result.downloads[0].day,
+              end: result.downloads[0].day,
+              package: r.query.pkg,
+            }
           }
         )
         const reduced = weeklyResults.reduce((accumulator, current) => {
@@ -195,7 +205,12 @@ module.exports = [
           async range => {
             const result = await pkgDownloads(r.query.pkg, range)
             await delay(100)
-            return result
+            return {
+              downloads: result.downloads[0].downloads,
+              start: result.downloads[0].day,
+              end: result.downloads[0].day,
+              package: r.query.pkg,
+            }
           }
         )
         const reduced = weeklyResults.reduce((accumulator, current) => {
@@ -296,7 +311,12 @@ module.exports = [
           async range => {
             const result = await pkgDownloads(r.query.pkg, range)
             await delay(120)
-            return result
+            return {
+              downloads: result.downloads[0].downloads,
+              start: result.downloads[0].day,
+              end: result.downloads[0].day,
+              package: r.query.pkg,
+            }
           },
           5
         )
