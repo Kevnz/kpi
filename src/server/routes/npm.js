@@ -244,9 +244,9 @@ module.exports = [
             await delay(110)
 
             return {
-              downloads: result[0].downloads,
-              start: result[0].day,
-              end: result[0].day,
+              downloads: result.downloads[0].downloads,
+              start: result.downloads[0].day,
+              end: result.downloads[0].day,
               package: r.query.pkg,
             }
           },
