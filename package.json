@@ -11,7 +11,7 @@
     "@hapi/hapi": "^18.4.0",
     "@hapi/nes": "^11.2.0",
     "@kev_nz/async-tools": "^1.2.3",
-    "apollo-server-hapi": "^2.8.1",
+    "apollo-server-hapi": "^2.14.2",
     "blipp": "^4.0.0",
     "date-arithmetic": "^4.0.1",
     "days-in-a-row": "^2.0.1",
