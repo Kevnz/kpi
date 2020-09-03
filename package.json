@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@brightleaf/cache": "^1.0.3",
-    "@hapi/hapi": "^18.4.0",
+    "@hapi/hapi": "^19.1.1",
     "@hapi/nes": "^11.2.0",
     "@kev_nz/async-tools": "^1.2.3",
     "apollo-server-hapi": "^2.8.1",
