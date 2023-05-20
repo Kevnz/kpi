@@ -1,25 +1,48 @@
-const Cache = require('@brightleaf/cache')
+const Cache = require('node-cache')
 const { delay, mapper } = require('@kev_nz/async-tools')
 const faker = require('faker')
 const { Post, User, Product } = require('../models')
 
 const ga = require('../utils/ga')
-const redisConfig = {
-  port: process.env.REDIS_PORT,
-  host: process.env.REDIS_HOST,
-}
 
-if (process.env.REDIS_PASSWORD) {
-  redisConfig.password = process.env.REDIS_PASSWORD
-}
-
-const cache = new Cache({ prepend: 'kpi', redis: redisConfig })
+const cache = new Cache()
 
 const POSTS_KEY = 'all-blog-posts'
 
 const PRODUCTS_KEY = 'all-products'
 
 const GA_CATEGORY = 'API REST Call'
+
+const getBlogPosts = async (request, h) => {
+  ga.event(GA_CATEGORY, 'Posts Call')
+  const posts = await cache.get(POSTS_KEY)
+  if (posts) {
+    return posts
+  }
+  const genPosts = Post.getAll()
+  cache.set(POSTS_KEY, genPosts)
+  return genPosts
+}
+const getBlogPost = async (request, h) => {
+  ga.event(GA_CATEGORY, 'Post Call')
+  const posts = await cache.get(POSTS_KEY)
+  if (posts) {
+    const one = posts.find(p => p.slug === request.params.slug)
+    if (one && one.length > 0) return one[0]
+    return posts[0]
+  }
+  return Post.get()
+}
+const getUsers = async (request, h) => {
+  ga.event(GA_CATEGORY, 'Users Call')
+  const users = await cache.get('all-users')
+  if (users) {
+    return users
+  }
+  const genUsers = User.getAll()
+  cache.set('all-users', genUsers)
+  return genUsers
+}
 module.exports = [
   {
     method: 'GET',
@@ -28,16 +51,7 @@ module.exports = [
       description: 'Get blog posts',
       notes: 'Returns list of blog posts',
       tags: ['api'],
-      handler: async (request, h) => {
-        ga.event(GA_CATEGORY, 'Posts Call')
-        const posts = await cache.get(POSTS_KEY)
-        if (posts) {
-          return posts
-        }
-        const genPosts = Post.getAll()
-        cache.set(POSTS_KEY, genPosts)
-        return genPosts
-      },
+      handler: getBlogPosts,
     },
   },
   {
@@ -47,16 +61,7 @@ module.exports = [
       description: 'Get a blog post',
       notes: 'Returns blog post that matches slug',
       tags: ['api'],
-      handler: async (request, h) => {
-        ga.event(GA_CATEGORY, 'Post Call')
-        const posts = await cache.get(POSTS_KEY)
-        if (posts) {
-          const one = posts.find(p => p.slug === request.params.slug)
-          if (one && one.length > 0) return one[0]
-          return posts[0]
-        }
-        return Post.get()
-      },
+      handler: getBlogPost,
     },
   },
   {
@@ -66,16 +71,7 @@ module.exports = [
       description: 'Get a list of users',
       notes: 'Returns a list of users',
       tags: ['api'],
-      handler: async (request, h) => {
-        ga.event(GA_CATEGORY, 'Users Call')
-        const users = await cache.get('all-users')
-        if (users) {
-          return users
-        }
-        const genUsers = User.getAll()
-        cache.set('all-users', genUsers)
-        return genUsers
-      },
+      handler: getUsers,
     },
   },
   {
@@ -89,7 +85,7 @@ module.exports = [
         ga.event(GA_CATEGORY, 'Products Call')
         if (request.query.page) {
           const page = parseInt(request.query.page, 10)
-          const products = await cache.get(`${PRODUCTS_KEY}-PAGE-${page}`)
+          const products = cache.get(`${PRODUCTS_KEY}-PAGE-${page}`)
           if (products) {
             return products
           }
@@ -97,7 +93,7 @@ module.exports = [
           cache.set(`${PRODUCTS_KEY}-PAGE-${page}`, genProds)
           return genProds
         }
-        const products = await cache.get(PRODUCTS_KEY)
+        const products = cache.get(PRODUCTS_KEY)
         if (products) {
           return products
         }
@@ -116,7 +112,7 @@ module.exports = [
       tags: ['api'],
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, 'Product Call')
-        const products = await cache.get(PRODUCTS_KEY)
+        const products = cache.get(PRODUCTS_KEY)
         if (products) {
           const one = products.find(p => p.id === request.params.id)
           if (one && one.length > 0) return one[0]
@@ -246,7 +242,7 @@ module.exports = [
       handler: async (request, h) => {
         ga.event(GA_CATEGORY, `API ALL ITEMS`)
 
-        const itemKeys = await cache.redis.keys('*item*')
+        const itemKeys = await cache.keys()
         const cleaned = itemKeys.map(k => k.replace('kpi-', ''))
         console.log('cleaned key', cleaned)
         if (cleaned) {

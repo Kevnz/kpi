@@ -1,18 +1,10 @@
-const Cache = require('@brightleaf/cache')
+const Cache = require('node-cache')
 const { delay } = require('@kev_nz/async-tools')
 const { Post, User, Product } = require('../models')
 
 const ga = require('../utils/ga')
-const redisConfig = {
-  port: process.env.REDIS_PORT,
-  host: process.env.REDIS_HOST,
-}
 
-if (process.env.REDIS_PASSWORD) {
-  redisConfig.password = process.env.REDIS_PASSWORD
-}
-
-const cache = new Cache({ prepend: 'kpi', redis: redisConfig })
+const cache = new Cache()
 
 const GA_CATEGORY = 'API ME Call'
 module.exports = [

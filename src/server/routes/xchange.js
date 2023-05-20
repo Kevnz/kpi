@@ -1,4 +1,4 @@
-const Cache = require('@brightleaf/cache')
+const Cache = require('node-cache')
 const r2 = require('r2')
 const { mapper } = require('@kev_nz/async-tools')
 const daysInARow = require('days-in-a-row')
@@ -44,14 +44,10 @@ const getRatesFor = async date => {
     return { [date]: rates }
   }
   console.log(
-    `https://openexchangerates.org/api/historical/${date}.json?app_id=${
-      process.env.OXR
-    }`
+    `https://openexchangerates.org/api/historical/${date}.json?app_id=${process.env.OXR}`
   )
   const results = await r2.get(
-    `https://openexchangerates.org/api/historical/${date}.json?app_id=${
-      process.env.OXR
-    }`
+    `https://openexchangerates.org/api/historical/${date}.json?app_id=${process.env.OXR}`
   ).json
   ga.event(GA_CATEGORY, 'Historic rates from OXR')
   cache.set(XCHANGE_RATES_KEY, results)
@@ -74,9 +70,7 @@ const getSeries = async (
 ) => {
   const url = 'https://openexchangerates.org/api/time-series.json'
   return r2.get(
-    `${url}?app_id=${
-      process.env.OXR
-    }&start=${start}&end=${end}&base=${base}&symbols=${symbols}`
+    `${url}?app_id=${process.env.OXR}&start=${start}&end=${end}&base=${base}&symbols=${symbols}`
   ).json
 }
 

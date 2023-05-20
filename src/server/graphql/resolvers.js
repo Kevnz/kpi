@@ -1,17 +1,8 @@
-const Cache = require('@brightleaf/cache')
+const Cache = require('node-cache')
 const { User, Post, Product } = require('../models')
 const { getToken } = require('../utils/auth')
 
-const redisConfig = {
-  port: process.env.REDIS_PORT,
-  host: process.env.REDIS_HOST,
-}
-
-if (process.env.REDIS_PASSWORD) {
-  redisConfig.password = process.env.REDIS_PASSWORD
-}
-
-const cache = new Cache({ prepend: 'kpi', redis: redisConfig })
+const cache = new Cache({})
 
 const POSTS_KEY = 'all-blog-posts'
 
@@ -19,6 +10,11 @@ const PRODUCTS_KEY = 'all-products'
 
 const resolvers = {
   Query: {
+    kevin: async (root, args, context, info) => {
+      return {
+        name: 'Kevin Isom',
+      }
+    },
     user: async (root, args, context, info) => {
       return User.get()
     },
@@ -41,7 +37,7 @@ const resolvers = {
       return Product.get()
     },
     products: async (root, args, context, info) => {
-      const products = await cache.get(PRODUCTS_KEY)
+      const products = cache.get(PRODUCTS_KEY)
       if (products) {
         return products
       }
@@ -50,7 +46,7 @@ const resolvers = {
       return genProds
     },
     posts: async (root, args, context, info) => {
-      const posts = await cache.get(POSTS_KEY)
+      const posts = cache.get(POSTS_KEY)
       if (posts) {
         return posts
       }
@@ -59,7 +55,7 @@ const resolvers = {
       return genPosts
     },
     post: async (root, args, context, info) => {
-      const posts = await cache.get(POSTS_KEY)
+      const posts = cache.get(POSTS_KEY)
       if (posts) {
         const one = posts.find(p => p.slug === args.slug)
         if (one && one.length > 0) return one[0]

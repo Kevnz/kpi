@@ -1,4 +1,4 @@
-const Cache = require('@brightleaf/cache')
+const Cache = require('node-cache')
 const r2 = require('r2')
 const fetch = require('node-fetch')
 const { delay, mapper } = require('@kev_nz/async-tools')
@@ -7,16 +7,8 @@ const ymd = require('year-month-day')
 const pkgDownloads = require('../utils/package')
 
 const ga = require('../utils/ga')
-const redisConfig = {
-  port: process.env.REDIS_PORT,
-  host: process.env.REDIS_HOST,
-}
 
-if (process.env.REDIS_PASSWORD) {
-  redisConfig.password = process.env.REDIS_PASSWORD
-}
-
-const cache = new Cache({ prepend: 'kpi', redis: redisConfig })
+const cache = new Cache()
 
 const GA_CATEGORY = 'API Package Call'
 module.exports = [

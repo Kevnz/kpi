@@ -2,6 +2,42 @@ const { gql } = require('apollo-server-hapi')
 
 const typeDefs = gql`
   """
+  Kevin Type
+  """
+  type Kevin {
+    name: String
+    repositories: [Repository]
+    tweets: [String]
+    posts: [BlogPost]
+    social: [Link]
+  }
+
+  type Link {
+    username: String
+    url: String
+    name: String
+  }
+
+  type BlogPost {
+    title: String
+    description: String
+    url: String
+    publishedOn: String
+  }
+
+  type Tweet {
+    message: String
+    tweetedOn: String
+  }
+
+  type Repository {
+    name: String
+    url: String
+    lastCommit: String
+    language: String
+  }
+
+  """
   The User is the person in the system
   """
   type User {
@@ -43,6 +79,7 @@ const typeDefs = gql`
     products: [Product]
     posts: [Post]
     post(slug: String): Post
+    kevin: Kevin
   }
 
   """
