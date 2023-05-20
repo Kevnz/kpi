@@ -26,6 +26,7 @@ const start = async () => {
           origin: ['*'],
           additionalHeaders: [
             'x-kpi-server',
+            'x-kevpi-server',
             'content-type',
             'schema',
             'page',
