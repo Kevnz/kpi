@@ -1,10 +1,4 @@
-const Cache = require('node-cache')
-const { delay } = require('@kev_nz/async-tools')
-const { Post, User, Product } = require('../models')
-
 const ga = require('../utils/ga')
-
-const cache = new Cache()
 
 const GA_CATEGORY = 'API ME Call'
 module.exports = [
